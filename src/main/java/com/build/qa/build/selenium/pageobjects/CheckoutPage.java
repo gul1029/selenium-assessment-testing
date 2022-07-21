@@ -1,12 +1,12 @@
 package com.build.qa.build.selenium.pageobjects;
 
+
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.Wait;
 
-public class CheckoutPage extends BasePage{
+public class CheckoutPage {
+    public WebDriver driver;
 
-
-    public CheckoutPage(WebDriver driver, Wait<WebDriver> wait) {
-        super(driver, wait);
+    public CheckoutPage(WebDriver driver) {
+        this.driver=driver;
     }
 }

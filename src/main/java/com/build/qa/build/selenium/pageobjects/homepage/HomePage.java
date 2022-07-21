@@ -1,26 +1,31 @@
 package com.build.qa.build.selenium.pageobjects.homepage;
 
-import com.build.qa.build.selenium.pageobjects.ProductPage;
+import com.build.qa.build.selenium.pageobjects.FunctionPage;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Wait;
+import org.openqa.selenium.support.PageFactory;
 
-import com.build.qa.build.selenium.pageobjects.BasePage;
+public class HomePage {
 
-public class HomePage extends BasePage {
-	
-	private By homePageWrapper;
+	public WebDriver driver;
+
+	@FindBy(css = "#wrapper.homepage")
+	WebElement homePageWrapper;
+
+	@FindBy(css = "#react-type-ahead-normal > fieldset > input")
 	WebElement searchBar;
-	
-	public HomePage(WebDriver driver, Wait<WebDriver> wait) {
-		super(driver, wait);
-		homePageWrapper = By.cssSelector("#wrapper.homepage");
-		searchBar = driver.findElement(By.cssSelector("#react-type-ahead-normal > fieldset > input"));
+	FunctionPage functionPage;
+
+
+	public HomePage(WebDriver driver) {
+		this.driver = driver;
+		PageFactory.initElements(driver, this);
+		functionPage=new FunctionPage(driver);
 	}
 
 	public boolean onHomePage() {
-		return wait.until(ExpectedConditions.presenceOfElementLocated(homePageWrapper)) != null;
+		functionPage.waitUntilElementIsVisbilt(homePageWrapper);
+		return homePageWrapper.isDisplayed();
 	}
 
 	public void onSearchBar(String item) {
