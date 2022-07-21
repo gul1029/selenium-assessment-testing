@@ -3,10 +3,16 @@ package com.build.qa.build.selenium.tests;
 import com.build.qa.build.selenium.pageobjects.ProductPage;
 import org.junit.Test;
 
-import com.build.qa.build.selenium.framework.BaseFramework;
+import com.build.qa.build.selenium.pageobjects.homepage.HomePage;
+import com.build.qa.build.selenium.pageobjects.ProductPage;
+import org.assertj.core.api.JUnitSoftAssertions;
+import org.junit.Assert;
+import org.junit.Test;
+
 import com.build.qa.build.selenium.pageobjects.homepage.HomePage;
 
 public class FergTest extends BaseFramework {
+
 
 	/**
 	 * Extremely basic test that outlines some basic
@@ -15,11 +21,8 @@ public class FergTest extends BaseFramework {
 	@Test
 	public void navigateToHomePage() {
 		driver.get(getConfiguration("HOMEPAGE"));
-		HomePage homePage = new HomePage(driver, wait);
-
-		softly.assertThat(homePage.onHomePage())
-			.as("The website should load up with the Build.com desktop theme.")
-			.isTrue();
+		HomePage homePage = new HomePage(driver);
+		Assert.assertTrue("The website home page did not load.", homePage.onHomePage());
 	}
 
 	/**
@@ -54,17 +57,15 @@ public class FergTest extends BaseFramework {
 	public void addMultipleCartItemsAndChangeQuantity() {
 
 		driver.get(getConfiguration("HOMEPAGE"));
-		HomePage homePage = new HomePage(driver, wait);
+		HomePage homePage = new HomePage(driver);
 
 		homePage.onSearchBar("m6702bn");
 
-		ProductPage productPage = new ProductPage(driver, wait);
+		ProductPage productPage = new ProductPage(driver);
 		productPage.addItemToCart();
 		productPage.searchForItem("S3315025BT");
 		productPage.addItemToCart();
-		softly.assertThat(productPage.clickCartButton())
-				.as("The website should load up with the Build.com desktop theme.")
-				.isTrue();
+		Assert.assertTrue("The products quantity and the total price being updated in the shopping cart",productPage.clickCartButton());
 	}
 
 	/**

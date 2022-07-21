@@ -1,17 +1,14 @@
-package com.build.qa.build.selenium.framework;
+package com.build.qa.build.selenium.tests;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
-
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.assertj.core.api.JUnitSoftAssertions;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Rule;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -23,16 +20,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public abstract class BaseFramework {
-	protected WebDriver driver;
-	protected Wait<WebDriver> wait;
-	private static final Logger LOG = LoggerFactory.getLogger(BaseFramework.class);
-	private static final String CONFIG_FILE = "./conf/automation.properties";
-	private static final String DRIVER_FIREFOX = "firefox";
-	private static final String DRIVER_CHROME = "chrome";
-	private static Properties configuration;
-
-	@Rule
-	public final JUnitSoftAssertions softly = new JUnitSoftAssertions();
+	public WebDriver driver;
+	public Wait<WebDriver> wait;
+	public static final Logger LOG = LoggerFactory.getLogger(BaseFramework.class);
+	public static final String CONFIG_FILE = "./conf/automation.properties";
+	public static final String DRIVER_FIREFOX = "firefox";
+	public static final String DRIVER_CHROME = "chrome";
+	public static Properties configuration;
 
 	@BeforeClass
 	public static void beforeClass() throws IOException {
@@ -58,7 +52,7 @@ public abstract class BaseFramework {
 			driver = new FirefoxDriver(capabilities);
 		}
 		// Define fluent wait
-		wait = new FluentWait<WebDriver>(driver).withTimeout(15, TimeUnit.SECONDS).pollingEvery(500, TimeUnit.MILLISECONDS)
+		wait = new FluentWait<WebDriver>(driver).withTimeout(60, TimeUnit.SECONDS).pollingEvery(500, TimeUnit.MILLISECONDS)
 				.ignoring(NoSuchElementException.class);
 	}
 
@@ -73,7 +67,9 @@ public abstract class BaseFramework {
 	@After
 	public void tearDownAfter() {
 		LOG.info("Quitting driver.");
-		driver.quit();
-		driver = null;
+		if(driver!=null) {
+			driver.close();
+		}
 	}
-}
+	}
+
